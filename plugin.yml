@@ -1,6 +1,6 @@
 name: LaunchMe
 main: net.kaoslabs.launchme.LaunchMe
-version: 1.8
+version: 1.9
 softdepend: [Vault, Spout]
 author: Kaos
 commands:
