@@ -1,0 +1,38 @@
+name: LaunchMe
+main: net.kaoslabs.launchme.LaunchMe
+version: 1.8
+softdepend: [Vault, Spout]
+author: Kaos
+commands:
+  launch:
+      description: Activates a cannon.
+      usage: /<command>
+      aliases: [fire]
+  tele:
+      description: Activates a teleporter.
+      usage: /<command>
+      aliases: [teleporter]
+permissions:
+    launchme.*:
+        description: Gives access to all launchme commands
+        children:
+            launchme.cannon: true
+            launchme.launch: true
+            launchme.land: true
+            launchme.teleporter: true
+            launchme.teleport: true
+    launchme.cannon:
+        description: Allows you to create [cannon] signs.
+        default: false
+    launchme.land:
+        description: Allows you to create [land] signs.
+        default: false
+    launchme.launch:
+        description: Fires you from a cannon!
+        default: true
+    launchme.teleporter:
+        description: Allows you to create [teleport] signs.
+        default: false
+    launchme.teleport:
+        description: Teleports you!
+        default: true
