@@ -71,12 +71,13 @@ public class LaunchMe extends JavaPlugin {
 	}
 	
 	public void startMetrics() { 	
+		PluginDescriptionFile pdfFile = this.getDescription();
 		try {	
 			Metrics metrics = new Metrics(this);	
 			metrics.start();
-			LaunchMe.log.info("[LaunchMeEvo] Metrics connection started.");
+			LaunchMe.log.info("[" + pdfFile.getName() + "] Metrics connection started.");
 		} catch (IOException e) {
-			LaunchMe.log.warning("[LaunchMeEvo] Failed to submit the stats :-("); // Failed to submit the stats :-(
+			LaunchMe.log.warning("[" + pdfFile.getName() + "] Failed to submit the stats :-("); // Failed to submit the stats :-(
 		}
 	}
 	public void setupConfig()
