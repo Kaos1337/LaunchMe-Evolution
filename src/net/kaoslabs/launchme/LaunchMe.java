@@ -1,11 +1,11 @@
 package net.kaoslabs.launchme;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,6 +24,7 @@ public class LaunchMe extends JavaPlugin {
 	public final SignListener signListener = new SignListener(this);
 	public final KickListener kickListener = new KickListener(this);
     public static Economy economy = null;
+    public static final Logger log = Logger.getLogger("Minecraft");
 	
 	public void onDisable() {
 
@@ -41,35 +42,42 @@ public class LaunchMe extends JavaPlugin {
 		FileConfiguration config = this.getConfig();
 		launched.clear();
 		
+		// start Metrics
+		startMetrics();
+		
 		if (config.getBoolean("enable", false)) {
 			logger.info("[" + pdfFile.getName() + "] " + pdfFile.getName() + " version " + pdfFile.getVersion() + " enabled!");
 			registerListeners();
 			registerCommands();
-			if(this.getServer().getPluginManager().getPlugin("Vault") != null) 
-			{
-			setupEconomy();
+			if(this.getServer().getPluginManager().getPlugin("Vault") != null) {
+				setupEconomy();
 			}
-		} 
-		else 
-		{
+		} else {
 			logger.info("[" + pdfFile.getName() + "] " + pdfFile.getName() + " version " + pdfFile.getVersion() + " disabled by config.yml!");
 			this.getPluginLoader().disablePlugin(this);
 		}
-		logger.setFilter(new Filter()
-        {
+		logger.setFilter(new Filter() {
          public boolean isLoggable(LogRecord record) {
-         if(record.getMessage() != null)
-         {
-         if(record.getMessage().endsWith("was kicked for floating too long!"))
-         {
-         return false;
-         }
-         }
+        	 if(record.getMessage() != null) {
+        		 if(record.getMessage().endsWith("was kicked for floating too long!")) {
+        			 return false;
+        		 }
+        	 }
          return true;
-}
+         }
         
         });
 		this.saveConfig();
+	}
+	
+	public void startMetrics() { 	
+		try {	
+			Metrics metrics = new Metrics(this);	
+			metrics.start();
+			LaunchMe.log.info("[LaunchMeEvo] Metrics connection started.");
+		} catch (IOException e) {
+			LaunchMe.log.warning("[LaunchMeEvo] Failed to submit the stats :-("); // Failed to submit the stats :-(
+		}
 	}
 	public void setupConfig()
 	{			
